@@ -1,0 +1,122 @@
+--T?o B?ng
+CREATE TABLE KHACHHANG (
+    MaKh Varchar2(20) NOT NULL PRIMARY KEY,
+    TenKh Varchar2(50),
+    SDT int,
+    GioiTinh Varchar2(10),
+    DiaChi Varchar2(50)
+)
+
+CREATE TABLE NHANVIEN (
+    MaNv Varchar2(20) NOT NULL PRIMARY KEY,
+    TenNhanVien Varchar2(50),
+    GioiTinh Varchar2(10),
+    DiaChi Varchar2(50),
+    SDT int
+)
+
+CREATE TABLE HANGHOA (
+    MaHang Varchar2(20) NOT NULL PRIMARY KEY,
+    TenHang Varchar2(50),
+    DonGia Varchar2(50),
+    SoLuongKho int
+)
+
+CREATE TABLE HOADON (
+    MaHD Varchar2(20) NOT NULL PRIMARY KEY,
+    MaKh Varchar2(20) REFERENCES KHACHHANG(MaKh),
+    MaNv Varchar2(20) REFERENCES NHANVIEN(MaNv),
+    MaHang Varchar2(20) REFERENCES HANGHOA(MaHang),
+    TenKh Varchar2(50),
+    TenNhanVien Varchar2(50),
+    NgayLap DATE
+)
+
+CREATE TABLE CTHD (
+    MaHD Varchar2(20) REFERENCES HOADON(MaHD),
+    MaHang Varchar2(20) REFERENCES HANGHOA(MaHang),
+    TenHang Varchar2(50),
+    DonGia int,
+    SoLuong int,
+    ThanhTien int
+)
+
+CREATE TABLE NGUOIDUNG (
+    ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    UserName VARCHAR2(50),
+    PassWord VARCHAR2(50)
+)
+
+--S?a các b?ng
+DROP TABLE KHACHHANG;
+DROP TABLE NHANVIEN;
+DROP TABLE HANGHOA;
+DROP TABLE HOADON;
+DROP TABLE CTHD;
+DROP TABLE NGUOIDUNG;
+
+--Thêm d? li?u cho b?ng
+INSERT INTO KHACHHANG VALUES ('A01','Nguy?n V?n Hô?','063942423','Nam','Hà N?i');
+INSERT INTO KHACHHANG VALUES ('A02','V? Thu Hà','012345432','N?','Hà N?i');
+INSERT INTO KHACHHANG VALUES ('A03','Lê V?n Lâm','042365424','Nam','Hà N?i');
+INSERT INTO KHACHHANG VALUES ('A04','Hà Duy H?i','043251523','Nam','H?ng Yên');
+INSERT INTO KHACHHANG VALUES ('A05','Nguy?n Ki?u Trang','041212354','N?','Qu?ng Ninh');
+DELETE KHACHHANG;
+
+INSERT INTO NHANVIEN VALUES ('N1','V? V?n C?','Nam','Hà N?i','053456354');
+INSERT INTO NHANVIEN VALUES ('N2','Nguy?n Khánh Linh','N?','Thái Nguyên','0235634141');
+INSERT INTO NHANVIEN VALUES ('N3','H? Vi?t Trung','Nam','Qu?ng Bình','0144253432');
+INSERT INTO NHANVIEN VALUES ('N4','Tr??ng Gia M?n','N?','Hà N?i','02428352353');
+INSERT INTO NHANVIEN VALUES ('N5','Ph?m Bá Hùng','Nam','Hà Nam','0435123534');
+DELETE NHANVIEN;
+
+INSERT INTO HANGHOA VALUES ('H1','N??c Ng?t','12000', 50);
+INSERT INTO HANGHOA VALUES ('H2','Bim Bim','10000', 120);
+INSERT INTO HANGHOA VALUES ('H3','Mì Gói','7000', 90);
+INSERT INTO HANGHOA VALUES ('H4','Xúc Xích','45000', 20);
+INSERT INTO HANGHOA VALUES ('H5','Rau','5000', 15);
+INSERT INTO HANGHOA VALUES ('H6','N??c r?a chén','8000', 45);
+INSERT INTO HANGHOA VALUES ('H7','B?t Gi?t','150000', 10);
+INSERT INTO HANGHOA VALUES ('H8','N??c X?','50000', 40);
+INSERT INTO HANGHOA VALUES ('H9','?? ?n v?t','5000', 124);
+INSERT INTO HANGHOA VALUES ('H10','Bia','8000', 39);
+DELETE HANGHOA;
+
+INSERT INTO HOADON VALUES ('D1','A01','N1','H1','Nguy?n V?n H?i' ,'V? V?n C?',TO_DATE('12/09/2023', 'DD/MM/YYYY'));
+INSERT INTO HOADON VALUES ('D2','A02','N2','H2','V? Thu Hà' ,'Nguy?n Khánh Linh',TO_DATE('12/07/2023', 'DD/MM/YYYY'));
+INSERT INTO HOADON VALUES ('D3','A03','N3','H3','Lê V?n Lâm' ,'H? Vi?t Trung',TO_DATE('12/08/2023', 'DD/MM/YYYY'));
+INSERT INTO HOADON VALUES ('D4','A04','N4','H4','Hà Duy H?i' ,'Tr??ng Gia M?n',TO_DATE('21/03/2023', 'DD/MM/YYYY'));
+INSERT INTO HOADON VALUES ('D5','A05','N5','H5','Nguy?n Ki?u Trang' ,'Ph?m Bá Hùng',TO_DATE('27/09/2023', 'DD/MM/YYYY'));
+DELETE HOADON;
+
+INSERT INTO CTHD VALUES ('D1','H1','N??c Ng?t',12000,2, 24000);
+INSERT INTO CTHD VALUES ('D2','H3','Bim Bim',10000,5, 50000);
+INSERT INTO CTHD VALUES ('D3','H2','Mì Gói',7000,4, 28000);
+INSERT INTO CTHD VALUES ('D4','H4','Rau',5000,3, 15000);
+INSERT INTO CTHD VALUES ('D5','H5','N??c r?a chén',8000,7, 56000);
+DELETE CTHD;
+
+INSERT INTO NGUOIDUNG (UserName, PassWord) VALUES ( 'admin', 'admin');
+INSERT INTO NGUOIDUNG (UserName, PassWord) VALUES ('minhtung', '1');
+DELETE NGUOIDUNG;
+
+--Truy v?n d? li?u
+SELECT * FROM KHACHHANG;
+SELECT * FROM NHANVIEN;
+SELECT * FROM HANGHOA;
+SELECT * FROM HOADON;
+SELECT * FROM CTHD;
+SELECT * FROM NGUOIDUNG;
+
+SELECT HOADON.MaHD, HOADON.MaKh, HOADON.MaNv, HOADON.MaNv,HOADON.TenKh, HOADON.TenNhanVien, HOADON.NgayLap,HANGHOA.TenHang 
+                         FROM HOADON 
+                         INNER JOIN HANGHOA ON HOADON.MaHang = HANGHOA.MaHang;
+SELECT HOADON.MaHD, HOADON.MaKh, HOADON.MaNv, HOADON.NgayLap, 
+                     KHACHHANG.TenKh AS TenKhachHang, KHACHHANG.SDT, KHACHHANG.GioiTinh, KHACHHANG.DiaChi, 
+                     NHANVIEN.TenNhanVien AS TenNhanVien, NHANVIEN.GioiTinh, NHANVIEN.DiaChi, NHANVIEN.SDT, 
+                     HANGHOA.TenHang AS TenSanPham, CTHD.DonGia, CTHD.SoLuong, CTHD.ThanhTien 
+                     FROM HOADON 
+                     INNER JOIN KHACHHANG ON HOADON.MaKh = KHACHHANG.MaKh 
+                     INNER JOIN NHANVIEN ON HOADON.MaNv = NHANVIEN.MaNv 
+                     INNER JOIN CTHD ON HOADON.MaHD = CTHD.MaHD 
+                     INNER JOIN HANGHOA ON CTHD.MaHang = HANGHOA.MaHang WHERE HOADON.MaHD = 'D1';

@@ -1,0 +1,209 @@
+-- Create tables
+CREATE TABLE KHACHHANG (
+    MaKh VARCHAR2(20) NOT NULL PRIMARY KEY,
+    TenKh VARCHAR2(50),
+    SDT VARCHAR2(20),
+    GioiTinh VARCHAR2(10),
+    DiaChi VARCHAR2(50)
+);
+
+CREATE TABLE NHANVIEN (
+    MaNv VARCHAR2(20) NOT NULL PRIMARY KEY,
+    TenNhanVien VARCHAR2(50),
+    GioiTinh VARCHAR2(10),
+    DiaChi VARCHAR2(50),
+    SDT VARCHAR2(20)
+);
+
+CREATE TABLE NHACUNGCAP (
+    MaNCC VARCHAR2(20) PRIMARY KEY,
+    TenNCC VARCHAR2(100),
+    DiaChi VARCHAR2(200),
+    DienThoai VARCHAR2(20),
+    Email VARCHAR2(100)
+);
+
+CREATE TABLE NGANHHANG (
+    MaNganh VARCHAR2(20) PRIMARY KEY,
+    TenNganh VARCHAR2(100)
+);
+
+CREATE TABLE HANGHOA (
+    MaHang VARCHAR2(20) NOT NULL PRIMARY KEY,
+    MaNganh VARCHAR2(20) REFERENCES NGANHHANG(MaNganh),
+    TenHang VARCHAR2(50),
+    SoLuongKho INT
+);
+
+CREATE TABLE HOADONNHAP (
+    MaHDN VARCHAR2(20) NOT NULL PRIMARY KEY,
+    MaNCC VARCHAR2(20) REFERENCES NHACUNGCAP(MaNCC),
+    MaNv VARCHAR2(20) REFERENCES NHANVIEN(MaNv),
+    NgayLap DATE,
+    TongTien number
+);
+
+DROP TABLE HOADONNHAP
+
+CREATE TABLE CHITIETHDN (
+    MaCTHDN VARCHAR2(20) PRIMARY KEY,
+    MaHDN VARCHAR2(20),
+    MaHang VARCHAR2(20),
+    SoLuong NUMBER,
+    DonGia NUMBER,
+    CONSTRAINT fk_hdn FOREIGN KEY (MaHDN) REFERENCES HOADONNHAP(MaHDN),
+    CONSTRAINT fk_hanghoa FOREIGN KEY (MaHang) REFERENCES HANGHOA(MaHang)
+);
+
+DROP TABLE CHITIETHDN
+
+CREATE TABLE HOADONXUAT (
+    MaHDX VARCHAR2(20) NOT NULL PRIMARY KEY,
+    MaKh VARCHAR2(20) REFERENCES KHACHHANG(MaKh),
+    MaNv VARCHAR2(20) REFERENCES NHANVIEN(MaNv),
+    NgayLap DATE,
+    TongTien number
+);
+DROP TABLE HOADONXUAT
+DELETE FROM HOADONXUAT;
+
+
+CREATE TABLE CHITIETHDX (
+    MaHDX VARCHAR2(20),
+    MaHang VARCHAR2(20),
+    SoLuong NUMBER,
+    CONSTRAINT fk_hdx FOREIGN KEY (MaHDX) REFERENCES HOADONXUAT(MaHDX),
+    CONSTRAINT fk_hanghoa_xuat FOREIGN KEY (MaHang) REFERENCES HANGHOA(MaHang)
+);
+
+DELETE FROM CHITIETHDX;
+
+DROP TABLE CHITIETHDX
+
+CREATE TABLE TAIKHOAN (
+    ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    UserName VARCHAR2(50),
+    PassWord VARCHAR2(50),
+    Role VARCHAR(20) DEFAULT 'Nhân Viên',
+    MaNv VARCHAR2(20) REFERENCES NHANVIEN(MaNv)
+);
+
+DROP TABLE TAIKHOAN
+
+-- Insert data
+INSERT INTO KHACHHANG (MaKh, TenKh, SDT, GioiTinh, DiaChi) VALUES ('A01','Nguy?n V?n H?i','063942423','Nam','Hà N?i');
+INSERT INTO KHACHHANG (MaKh, TenKh, SDT, GioiTinh, DiaChi) VALUES ('A02','V? Thu Hà','012345432','N?','Hà N?i');
+INSERT INTO KHACHHANG (MaKh, TenKh, SDT, GioiTinh, DiaChi) VALUES ('A03','Lê V?n Lâm','042365424','Nam','Hà N?i');
+INSERT INTO KHACHHANG (MaKh, TenKh, SDT, GioiTinh, DiaChi) VALUES ('A04','Hà Duy H?i','043251523','Nam','H?ng Yên');
+INSERT INTO KHACHHANG (MaKh, TenKh, SDT, GioiTinh, DiaChi) VALUES ('A05','Nguy?n Ki?u Trang','041212354','N?','Qu?ng Ninh');
+
+INSERT INTO NHANVIEN (MaNv, TenNhanVien, GioiTinh, DiaChi, SDT) VALUES ('N1','V? V?n C??ng','Nam','Hà N?i','053456354');
+INSERT INTO NHANVIEN (MaNv, TenNhanVien, GioiTinh, DiaChi, SDT) VALUES ('N2','Nguy?n Khánh Linh','N?','Thái Nguyên','0235634141');
+INSERT INTO NHANVIEN (MaNv, TenNhanVien, GioiTinh, DiaChi, SDT) VALUES ('N3','Hà Vi?t Trung','Nam','Qu?ng Bình','0144253432');
+INSERT INTO NHANVIEN (MaNv, TenNhanVien, GioiTinh, DiaChi, SDT) VALUES ('N4','Tr??ng Gia M?n','N?','Hà N?i','02428352353');
+INSERT INTO NHANVIEN (MaNv, TenNhanVien, GioiTinh, DiaChi, SDT) VALUES ('N5','Ph?m Bá Hùng','Nam','Hà Nam','0435123534');
+
+INSERT INTO NHACUNGCAP (MaNCC, TenNCC, DiaChi, DienThoai, Email) VALUES ('NCC1', 'Công ty TNHH ABC', '??a ch? ABC', '0123456789', 'abc@company.com');
+INSERT INTO NHACUNGCAP (MaNCC, TenNCC, DiaChi, DienThoai, Email) VALUES ('NCC2', 'Công ty TNHH XYZ', '??a ch? XYZ', '0987654321', 'xyz@company.com');
+
+-- Chèn d? li?u vào b?ng NGANHHANG
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH1', '?? ?n V?t');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH2', 'Rau - C? - Trái Cây');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH3', '?? u?ng - gi?i khát');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH4', 'Gia v?');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH5', 'Th?c ph?m ?ông l?nh');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH6', 'Th?c ph?m Khô');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH7', 'Bánh k?o');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH8', 'S?a');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH9', 'Hóa ph?m - t?y r?a');
+INSERT INTO NGANHHANG (MaNganh, TenNganh) VALUES ('NH10', 'Th?c ph?m ?n li?n');
+
+-- Thêm d? li?u cho b?ng HANGHOA
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H1', 'NH3', 'PEPSI NGK c.gaz v.chanh k.calo chai390ml', 34000, 50);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H2', 'NH3', 'Th?c u?ng t? lúa m?ch Ovaltine l? 400g', 60000, 80);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H3', 'NH3', 'N??c cam Vfresh Vinamilk h?p 1 lít', 42000, 50);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H4', 'NH3', 'N??c nho Vfresh Vinamilk h?p 1 lít', 58000, 50);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H5', 'NH3', 'N??c u?ng t?ng l?c Redbull lon 250ml', 12000, 50);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H6', 'NH1', 'Bánh que tôm Doakbua gói 55g', 16800, 20);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H7', 'NH1', 'Bim bim Poppedcorn qu?y so?n 280g', 59000, 20);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H8', 'NH1', 'M?c t?m gia v? Thái Bento gói 24g', 28100, 48);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H9', 'NH1', 'Ô mai m? xí mu?i H?ng Lam chua ng?t 200g', 75000, 15);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH1', 'Snack khoai tây t??i v? t?o bi?n O"Star gói 90g', 21600, 43);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H11', 'NH2', 'M?n h?u', 29600, 13);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H12', 'NH2', ' Cam Ai C?p', 49900, 12);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H13', 'NH4', 'H?t nêm th?t th?n, x??ng ?ng, t?y Knorr 900g ', 65600, 21);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H14', 'NH4', 'N??c m?m cá c?m Thu?n Phát 40 ?? ??m chai 610ml', 54600, 24);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H15', 'NH5', 'Tôm viên Tân Vi?t Sin gói 200g', 21600, 16);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH5', 'Ch? c?m Ng?c Th?m 300g', 82000, 13);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH6', 'B?t mì ?a d?ng Meizan gói 500g', 11600, 43);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH6', 'Rong bi?n giòn tr?n khô gà Miwon gói 30g', 31600, 30);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH7', 'Bánh cracker dinh d??ng AFC v? lúa mì h?p 200g', 21600, 40);
+INSERT INTO HANGHOA (MaHang, MaNganh, TenHang, DonGia, SoLuongKho) VALUES ('H10', 'NH7', 'Bánh que tôm Doakbua gói 55g', 13600, 20);
+
+-- Thêm d? li?u cho b?ng HOADONNHAP
+INSERT INTO HOADONNHAP (MaHDN, MaNCC, MaNv, NgayLap, TongTien) VALUES ('HDN001', 'NCC1', 'N1', TO_DATE('2023-05-10', 'YYYY-MM-DD'), 400000);
+INSERT INTO HOADONNHAP (MaHDN, MaNCC, MaNv, NgayLap, TongTien) VALUES ('HDN002', 'NCC1', 'N2', TO_DATE('2023-05-11', 'YYYY-MM-DD'), 400000);
+INSERT INTO HOADONNHAP (MaHDN, MaNCC, MaNv, NgayLap, TongTien) VALUES ('HDN003', 'NCC1', 'N3', TO_DATE('2023-05-12', 'YYYY-MM-DD'), 400000);
+INSERT INTO HOADONNHAP (MaHDN, MaNCC, MaNv, NgayLap, TongTien) VALUES ('HDN004', 'NCC2', 'N4', TO_DATE('2023-05-13', 'YYYY-MM-DD'), 400000);
+INSERT INTO HOADONNHAP (MaHDN, MaNCC, MaNv, NgayLap, TongTien) VALUES ('HDN005', 'NCC2', 'N5', TO_DATE('2023-05-14', 'YYYY-MM-DD'), 400000);
+
+-- Thêm d? li?u cho b?ng CHITIETHDN
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN1','HDN001', 'H1', 10, 32000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN2','HDN001', 'H2', 20, 50000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN3','HDN002', 'H3', 15, 40000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN4','HDN002', 'H4', 12, 55000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN5','HDN003', 'H5', 8, 10000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN6','HDN003', 'H6', 10, 15000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN7','HDN004', 'H7', 5, 30000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN8','HDN004', 'H8', 7, 40000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN9','HDN005', 'H9', 20, 20000);
+INSERT INTO CHITIETHDN (MaCTHDN, MaHDN, MaHang, SoLuong, DonGia) VALUES ('CTHDN10','HDN005', 'H10', 25, 25000);
+
+-- Thêm d? li?u cho b?ng HOADONXUAT
+INSERT INTO HOADONXUAT (MaHDX, MaKh, MaNv, NgayLap, TongTien) VALUES ('HDX001', 'A01', 'N1', TO_DATE('2023-06-20', 'YYYY-MM-DD'), 400000);
+INSERT INTO HOADONXUAT (MaHDX, MaKh, MaNv, NgayLap, TongTien) VALUES ('HDX002', 'A02', 'N2', TO_DATE('2023-06-21', 'YYYY-MM-DD'), 250000);
+INSERT INTO HOADONXUAT (MaHDX, MaKh, MaNv, NgayLap, TongTien) VALUES ('HDX003', 'A03', 'N3', TO_DATE('2023-06-22', 'YYYY-MM-DD'), 180000);
+INSERT INTO HOADONXUAT (MaHDX, MaKh, MaNv, NgayLap, TongTien) VALUES ('HDX004', 'A04', 'N4', TO_DATE('2023-06-23', 'YYYY-MM-DD'), 430000);
+INSERT INTO HOADONXUAT (MaHDX, MaKh, MaNv, NgayLap, TongTien) VALUES ('HDX005', 'A05', 'N5', TO_DATE('2023-06-24', 'YYYY-MM-DD'), 170000);
+
+-- Thêm d? li?u cho b?ng CHITIETHDX
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX001', 'H1', 5);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX001', 'H2', 8);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX002', 'H3', 10);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX002', 'H4', 15);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX003', 'H5', 12);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX003', 'H6', 20);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX004', 'H7', 7);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX004', 'H8', 5);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX005', 'H9', 18);
+INSERT INTO CHITIETHDX (MaHDX, MaHang, SoLuong) VALUES ('HDX005', 'H10', 20);
+
+-- Chèn d? li?u vào b?ng TAIKHOAN
+INSERT INTO TAIKHOAN (UserName, PassWord, Role, MaNv) VALUES ('admin', '1', 'Admin', NULL);
+INSERT INTO TAIKHOAN (UserName, PassWord, Role, MaNv) VALUES ('minhtung', '1', 'Admin', NULL);
+INSERT INTO TAIKHOAN (UserName, PassWord, Role, MaNv) VALUES ('vvcuong', '1', 'Nhân Viên', 'N1');
+
+-- Select data
+SELECT * FROM KHACHHANG;
+SELECT * FROM NHANVIEN;
+SELECT * FROM HANGHOA;
+SELECT * FROM NHACUNGCAP;
+SELECT * FROM HOADONXUAT;
+SELECT * FROM NGANHHANG;
+SELECT * FROM TAIKHOAN;
+SELECT * FROM HOADONNHAP;
+SELECT * FROM CHITIETHDX;
+SELECT * FROM CHITIETHDN;
+
+SELECT HOADONNHAP.MaHDN, HOADONNHAP.MaNCC, HOADONNHAP.MaNv, HOADONNHAP.NgayLap, HOADONNHAP.TongTien, 
+       NHACUNGCAP.TenNCC, NHACUNGCAP.DienThoai AS SDTNCC, NHACUNGCAP.Email AS emailNCC, NHACUNGCAP.DiaChi AS diaChiNCC, NHANVIEN.TenNhanVien, NHANVIEN.SDT AS SDTNhanVien, 
+       HANGHOA.TenHang AS TenSanPham, CHITIETHDN.MaHang, HANGHOA.DonGia, CHITIETHDN.SoLuong
+FROM HOADONNHAP
+INNER JOIN NHACUNGCAP ON HOADONNHAP.MaNCC = NHACUNGCAP.MaNCC
+INNER JOIN NHANVIEN ON HOADONNHAP.MaNv = NHANVIEN.MaNv
+INNER JOIN CHITIETHDN ON HOADONNHAP.MaHDN = CHITIETHDN.MaHDN
+INNER JOIN HANGHOA ON CHITIETHDN.MaHang = HANGHOA.MaHang
+WHERE HOADONNHAP.MaHDN = 'HDN001'
+
+
+
